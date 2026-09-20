@@ -1,53 +1,31 @@
 package com.flagship.gvmp.vending_portal_integration_tests.base;
 
+import com.flagship.gvmp.vending_portal_integration_tests.auth.AccessTokenProvider;
+import com.flagship.gvmp.vending_portal_integration_tests.clients.AuthClient;
 import com.flagship.gvmp.vending_portal_integration_tests.config.TestProperties;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static io.restassured.RestAssured.given;
 
 @SpringBootTest
 public abstract class BaseIntegrationTest {
 
-    @Autowired
-    protected TestProperties testProperties;
+    protected final TestProperties testProperties;
+    protected final AuthClient authClient;
+    private final AccessTokenProvider accessTokenProvider;
 
-    protected String accessToken;
-
-    @BeforeEach
-    void setup() {
-
-        RestAssured.baseURI = testProperties.getBaseUrl();
-
-        accessToken = loginAndGetAccessToken();
+    protected BaseIntegrationTest(TestProperties testProperties) {
+        this.testProperties = testProperties;
+        this.authClient = new AuthClient();
+        this.accessTokenProvider = new AccessTokenProvider(authClient, testProperties);
     }
 
-    private String loginAndGetAccessToken() {
+    @BeforeEach
+    void configureRestAssured() {
+        RestAssured.baseURI = testProperties.getBaseUrl();
+    }
 
-        String username = testProperties.getUsername();
-        String password = testProperties.getPassword();
-
-        String requestBody = """
-                {
-                    "username": "%s",
-                    "password": "%s"
-                }
-                """.formatted(username, password);
-
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when()
-                .post("/api/public/auth/login");
-
-        response.then()
-                .statusCode(200);
-
-        return response.jsonPath()
-                .getString("accessToken");
+    protected String authenticate() {
+        return accessTokenProvider.getAccessToken();
     }
 }

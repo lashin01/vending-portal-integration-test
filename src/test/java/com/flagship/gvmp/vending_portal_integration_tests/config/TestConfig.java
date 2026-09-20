@@ -9,7 +9,7 @@ public class TestConfig {
 
     @Bean
     public String baseUrl(
-            @Value("${base.url}") String baseUrl
+            @Value("${tms.base-url}") String baseUrl
     ) {
         return baseUrl;
     }

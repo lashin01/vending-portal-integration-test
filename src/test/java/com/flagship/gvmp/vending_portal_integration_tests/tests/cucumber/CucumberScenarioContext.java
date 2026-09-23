@@ -14,6 +14,8 @@ public class CucumberScenarioContext {
     private Long currentBoxId;
     private Long currentDocumentId;
     private Long currentMachineId;
+    private Long currentProductId;
+    private String currentGoldEraProductId;
 
     public String getAccessToken() {
         return accessToken;
@@ -61,5 +63,21 @@ public class CucumberScenarioContext {
 
     public void setCurrentMachineId(Long currentMachineId) {
         this.currentMachineId = currentMachineId;
+    }
+
+    public Long getCurrentProductId() {
+        return currentProductId;
+    }
+
+    public void setCurrentProductId(Long currentProductId) {
+        this.currentProductId = currentProductId;
+    }
+
+    public String getCurrentGoldEraProductId() {
+        return currentGoldEraProductId;
+    }
+
+    public void setCurrentGoldEraProductId(String currentGoldEraProductId) {
+        this.currentGoldEraProductId = currentGoldEraProductId;
     }
 }

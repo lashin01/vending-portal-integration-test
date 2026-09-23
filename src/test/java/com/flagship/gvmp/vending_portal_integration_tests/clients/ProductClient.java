@@ -47,6 +47,13 @@ public class ProductClient {
                 .get(PRODUCTS_ENDPOINT + "/ecommerce/available");
     }
 
+    public Response getAvailableEcommerceProducts(String query) {
+        return authenticated()
+                .queryParam("q", query)
+                .when()
+                .get(PRODUCTS_ENDPOINT + "/ecommerce/available");
+    }
+
     private RequestSpecification authenticated() {
         return given()
                 .header("Authorization", "Bearer " + accessToken);

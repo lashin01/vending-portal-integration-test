@@ -30,3 +30,9 @@ Feature: Product Admin API
     When I list ecommerce-available products
     Then the product response status should be 200
     And the response body should be a product collection
+
+  Scenario: Search ecommerce-available products
+    Given an ecommerce product search query is configured
+    When I search ecommerce-available products
+    Then the product response status should be 200
+    And the response body should be a product collection

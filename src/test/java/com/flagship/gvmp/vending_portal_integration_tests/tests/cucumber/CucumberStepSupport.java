@@ -32,19 +32,40 @@ public final class CucumberStepSupport {
         throw new TestAbortedException(message);
     }
 
-    public static void configureRestAssured(TestProperties testProperties) {
-        RestAssured.baseURI = testProperties.getBaseUrl();
+    public static void configureRestAssured(
+            TestProperties testProperties
+    ) {
+        RestAssured.baseURI =
+                testProperties.getBaseUrl();
     }
 
-    public static void requireBackendReachable(TestProperties testProperties) {
-        assertThat(testProperties.getBaseUrl()).isNotBlank();
-        URI baseUri = URI.create(testProperties.getBaseUrl());
-        int port = baseUri.getPort() == -1 ? 80 : baseUri.getPort();
+    public static void requireBackendReachable(
+            TestProperties testProperties
+    ) {
 
-        try (Socket ignored = new Socket(baseUri.getHost(), port)) {
+        assertThat(testProperties.getBaseUrl())
+                .isNotBlank();
+
+        URI baseUri =
+                URI.create(testProperties.getBaseUrl());
+
+        int port =
+                baseUri.getPort() == -1
+                        ? 80
+                        : baseUri.getPort();
+
+        try (Socket ignored =
+                     new Socket(baseUri.getHost(), port)) {
+
             // Reachable.
+
         } catch (IOException exception) {
-            skip("TMS backend is not reachable at " + testProperties.getBaseUrl() + ".");
+
+            skip(
+                    "TMS backend is not reachable at "
+                            + testProperties.getBaseUrl()
+                            + "."
+            );
         }
     }
 }

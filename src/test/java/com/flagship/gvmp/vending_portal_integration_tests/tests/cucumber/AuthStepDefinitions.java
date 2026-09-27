@@ -6,6 +6,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.flagship.gvmp.vending_portal_integration_tests.tests.cucumber.CucumberStepSupport.configureRestAssured;
@@ -37,6 +38,38 @@ public class AuthStepDefinitions {
     @Given("the auth API is available")
     public void theAuthApiIsAvailable() {
         requireBackendReachable(testProperties);
+    }
+
+    @Given("I am authenticated as a valid portal user")
+    public void iAmAuthenticatedAsAValidPortalUser() {
+
+        requireText(
+                testProperties.getUsername(),
+                "Set TMS_TEST_USERNAME to run this scenario."
+        );
+
+        requireText(
+                testProperties.getPassword(),
+                "Set TMS_TEST_PASSWORD to run this scenario."
+        );
+
+        Response response = authClient.login(
+                testProperties.getUsername(),
+                testProperties.getPassword()
+        );
+
+        assertThat(response.statusCode())
+                .isEqualTo(200);
+
+        String accessToken =
+                response.jsonPath()
+                        .getString("accessToken");
+
+        assertThat(accessToken)
+                .isNotBlank();
+
+        context.setAccessToken(accessToken);
+        context.setResponse(response);
     }
 
     @Given("valid test credentials are configured")

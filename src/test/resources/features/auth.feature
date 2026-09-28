@@ -5,7 +5,7 @@ Feature: Authentication API
 
   Scenario: Login with valid credentials
     Given valid test credentials are configured
-    When I login with the configured credentials
+    When I am authenticated as a valid portal user
     Then the auth response status should be 200
     And the response should contain a non-empty access token
     And the response should contain a non-empty refresh token

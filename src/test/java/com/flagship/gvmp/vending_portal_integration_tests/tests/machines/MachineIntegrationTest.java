@@ -16,11 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MachineIntegrationTest extends BaseIntegrationTest {
 
-    private final MachineClient machineClient =
-            new MachineClient();
+    private final MachineClient machineClient = new MachineClient();
 
-    private final ObjectMapper objectMapper =
-            new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     MachineIntegrationTest(TestProperties testProperties) {

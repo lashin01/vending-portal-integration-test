@@ -22,10 +22,7 @@ public class AuthStepDefinitions {
     private final AuthClient authClient = new AuthClient();
 
     @Autowired
-    public AuthStepDefinitions(
-            TestProperties testProperties,
-            CucumberScenarioContext context
-    ) {
+    public AuthStepDefinitions(TestProperties testProperties, CucumberScenarioContext context) {
         this.testProperties = testProperties;
         this.context = context;
     }
@@ -43,30 +40,17 @@ public class AuthStepDefinitions {
     @Given("I am authenticated as a valid portal user")
     public void iAmAuthenticatedAsAValidPortalUser() {
 
-        requireText(
-                testProperties.getUsername(),
-                "Set TMS_TEST_USERNAME to run this scenario."
-        );
+        requireText(testProperties.getUsername(),"Set TMS_TEST_USERNAME to run this scenario.");
 
-        requireText(
-                testProperties.getPassword(),
-                "Set TMS_TEST_PASSWORD to run this scenario."
-        );
+        requireText(testProperties.getPassword(),"Set TMS_TEST_PASSWORD to run this scenario.");
 
-        Response response = authClient.login(
-                testProperties.getUsername(),
-                testProperties.getPassword()
-        );
+        Response response = authClient.login(testProperties.getUsername(), testProperties.getPassword());
 
-        assertThat(response.statusCode())
-                .isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(200);
 
-        String accessToken =
-                response.jsonPath()
-                        .getString("accessToken");
+        String accessToken = response.jsonPath().getString("accessToken");
 
-        assertThat(accessToken)
-                .isNotBlank();
+        assertThat(accessToken).isNotBlank();
 
         context.setAccessToken(accessToken);
         context.setResponse(response);
@@ -81,11 +65,6 @@ public class AuthStepDefinitions {
     @Given("a valid refresh token is available")
     public void aValidRefreshTokenIsAvailable() {
         skip("Refresh-token flow is not wired yet. Capture refreshToken from login before enabling this scenario.");
-    }
-
-    @When("I login with the configured credentials")
-    public void iLoginWithTheConfiguredCredentials() {
-        context.setResponse(authClient.login(testProperties.getUsername(), testProperties.getPassword()));
     }
 
     @When("I refresh the access token")
